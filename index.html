@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="robots" content="index,follow">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://*.supabase.co;">
+<title>لویکس | Luvex — سامانه رسمی تأیید وب‌سایت</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700;800&display=swap');
+:root{
+  --bg:#05060c;
+  --s1:#0b0e1a;
+  --s2:#12162a;
+  --line:rgba(255,255,255,.08);
+  --txt:#f4f6ff;
+  --mut:#93a0bf;
+  --p:#a78bfa;
+  --p2:#7c3aed;
+  --c:#22d3ee;
+  --g:#fbbf24;
+  --ok:#34d399;
+  --bad:#fb7185;
+  --r:22px;
+  --font:'Vazirmatn',Tahoma,system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;font-family:var(--font);background:var(--bg);color:var(--txt)}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+a{color:#c4b5fd;text-decoration:none}
+.hidden{display:none!important}
+
+/* ambient background */
+.sky{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;
+  background:#05060c url('bg-space.png') center/cover no-repeat}
+.sky:before{content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(800px 400px at 10% 0%,rgba(124,58,237,.35),transparent 60%),
+    radial-gradient(600px 360px at 90% 20%,rgba(34,211,238,.18),transparent 55%),
+    linear-gradient(180deg,rgba(5,6,12,.45),rgba(5,6,12,.82) 50%,rgba(5,6,12,.94))}
+.orb{position:absolute;border-radius:50%;filter:blur(40px);opacity:.45}
+.orb.a{width:280px;height:280px;background:#7c3aed;top:-60px;right:-40px}
+.orb.b{width:220px;height:220px;background:#22d3ee;bottom:10%;left:-50px;opacity:.25}
+
+.page{position:relative;z-index:1;min-height:100vh}
+
+/* splash */
+#splash{position:fixed;inset:0;z-index:50;display:grid;place-items:center;
+  background:rgba(5,6,12,.94);transition:opacity .55s}
+#splash.go{opacity:0;pointer-events:none}
+.splash-mark{width:88px;height:88px;border-radius:28px;
+  background:linear-gradient(140deg,#a78bfa,#7c3aed 45%,#22d3ee);
+  display:grid;place-items:center;box-shadow:0 20px 50px rgba(124,58,237,.45);
+  font-weight:800;font-size:1.1rem;letter-spacing:.08em}
+.splash-mark i{font-style:normal}
+#splash h1{margin-top:16px;font-size:1.35rem;font-weight:800}
+#splash p{color:var(--mut);margin-top:6px;font-size:.88rem}
+
+/* AUTH — premium split */
+#auth{display:none;min-height:100vh}
+#auth.on{display:grid;grid-template-columns:1.12fr .88fr}
+@media(max-width:920px){
+  #auth.on{grid-template-columns:1fr}
+  .auth-hero{padding:28px 20px 12px!important;min-height:auto}
+}
+
+.auth-hero{padding:48px 40px;display:flex;flex-direction:column;justify-content:center;
+  border-left:1px solid var(--line);background:rgba(11,14,26,.55)}
+.pill{width:fit-content;padding:7px 14px;border-radius:999px;font-size:.72rem;font-weight:700;
+  letter-spacing:.06em;color:#ddd6fe;background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.25);margin-bottom:18px}
+.auth-hero h2{font-size:clamp(1.55rem,3.4vw,2.35rem);line-height:1.35;font-weight:800;max-width:520px;margin-bottom:12px}
+.auth-hero h2 span{background:linear-gradient(90deg,#e9d5ff,#22d3ee);-webkit-background-clip:text;color:transparent}
+.auth-hero .lead{color:var(--mut);font-size:.95rem;line-height:1.85;max-width:460px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:28px;max-width:420px}
+.stat{padding:14px 12px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid var(--line);text-align:center}
+.stat b{display:block;font-size:1.05rem;color:#e9d5ff;margin-bottom:4px}
+.stat span{font-size:.72rem;color:var(--mut)}
+.checklist{margin-top:22px;display:grid;gap:10px;max-width:440px}
+.checklist div{display:flex;gap:12px;align-items:flex-start}
+.dot{width:22px;height:22px;border-radius:8px;flex-shrink:0;margin-top:2px;
+  background:linear-gradient(135deg,#a78bfa,#22d3ee);display:grid;place-items:center;font-size:.7rem;font-weight:800;color:#0b0e1a}
+.checklist p{font-size:.86rem;color:#c7d2fe;line-height:1.55}
+
+.auth-form{display:flex;align-items:center;justify-content:center;padding:32px 18px}
+.form-wrap{width:100%;max-width:400px}
+.brand-row{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.brand-row .lx{width:48px;height:48px;border-radius:16px;background:linear-gradient(140deg,#a78bfa,#7c3aed);
+  display:grid;place-items:center;font-weight:800;box-shadow:0 12px 28px rgba(124,58,237,.35)}
+.brand-row strong{display:block;font-size:1.05rem}
+.brand-row small{color:var(--mut);font-size:.78rem}
+
+.glass{background:linear-gradient(180deg,rgba(18,22,42,.92),rgba(11,14,26,.94));
+  border:1px solid rgba(255,255,255,.1);border-radius:24px;padding:22px 18px;
+  box-shadow:0 24px 60px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.06)}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:5px;border-radius:14px;
+  background:rgba(0,0,0,.35);margin-bottom:14px}
+.seg button{padding:11px;border-radius:11px;font-weight:700;color:var(--mut);transition:.15s}
+.seg button.on{background:linear-gradient(135deg,rgba(167,139,250,.35),rgba(34,211,238,.12));
+  color:#fff;border:1px solid rgba(167,139,250,.3)}
+label{display:block;font-size:.74rem;font-weight:600;color:var(--mut);margin:11px 0 6px}
+.field{position:relative}
+input,textarea,select{width:100%;padding:13px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.08);
+  background:rgba(0,0,0,.28);outline:none;transition:border .15s,box-shadow .15s}
+input:focus,textarea:focus,select:focus{border-color:rgba(167,139,250,.55);box-shadow:0 0 0 3px rgba(124,58,237,.15)}
+.cta{width:100%;margin-top:16px;padding:14px;border-radius:14px;font-weight:800;font-size:.95rem;
+  background:linear-gradient(135deg,#a78bfa,#7c3aed 50%,#22d3ee);color:#0b0e1a;
+  box-shadow:0 14px 30px rgba(124,58,237,.3)}
+.cta:active{transform:scale(.985)}
+.cta.ghost{background:transparent;color:#ddd6fe;border:1px solid var(--line);box-shadow:none}
+.cta.ok{background:linear-gradient(135deg,#059669,#10b981);color:#fff;box-shadow:none}
+.cta.bad{background:transparent;color:var(--bad);border:1px solid rgba(251,113,133,.35);box-shadow:none}
+.msg{margin-top:10px;text-align:center;font-size:.84rem;color:var(--bad);min-height:1.2em}
+.msg.ok{color:var(--ok)}
+.fine{margin-top:14px;text-align:center;font-size:.75rem;color:var(--mut);line-height:1.5}
+
+/* APP */
+#app{display:none;max-width:780px;margin:0 auto;padding:16px 14px 48px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:4px 0 14px;
+  position:sticky;top:0;z-index:10;background:linear-gradient(180deg,rgba(5,6,12,.95),rgba(5,6,12,.75) 80%,transparent)}
+.who{display:flex;align-items:center;gap:10px}
+.who .av{width:42px;height:42px;border-radius:14px;background:linear-gradient(140deg,#a78bfa,#22d3ee);
+  display:grid;place-items:center;font-weight:800;font-size:.8rem;color:#0b0e1a}
+.who strong{display:block;font-size:.95rem}
+.who small{color:var(--mut);font-size:.72rem}
+.chip{padding:6px 12px;border-radius:999px;font-size:.72rem;font-weight:700;
+  background:rgba(167,139,250,.14);border:1px solid rgba(167,139,250,.28);color:#ddd6fe}
+
+.banner{border-radius:22px;padding:20px 18px;margin-bottom:16px;
+  background:linear-gradient(135deg,rgba(124,58,237,.22),rgba(34,211,238,.08));
+  border:1px solid rgba(167,139,250,.22);position:relative;overflow:hidden}
+.banner:before{content:"";position:absolute;width:160px;height:160px;border-radius:50%;
+  background:rgba(34,211,238,.12);filter:blur(20px);left:-30px;top:-40px;pointer-events:none}
+.banner h3{font-size:1.15rem;margin-bottom:8px;position:relative}
+.banner p{color:var(--mut);font-size:.88rem;line-height:1.75;position:relative;max-width:560px}
+.meter{margin-top:14px;height:6px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden;position:relative}
+.meter i{display:block;height:100%;width:72%;border-radius:999px;
+  background:linear-gradient(90deg,#a78bfa,#22d3ee)}
+
+.sec{margin-bottom:16px}
+.sec h4{font-size:.98rem;margin-bottom:10px;color:#ddd6fe;font-weight:700}
+.box{background:rgba(18,22,42,.88);border:1px solid var(--line);border-radius:18px;padding:16px}
+.admin{border-color:rgba(34,211,238,.28)}
+.row{padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.row:last-child{border-bottom:0}
+.row b{display:block;margin-bottom:4px}
+.row p{color:var(--mut);font-size:.8rem;line-height:1.5}
+.tag{display:inline-block;padding:2px 9px;border-radius:999px;font-size:.7rem;margin-right:4px;background:rgba(255,255,255,.06);color:var(--mut)}
+.tag.pub{background:rgba(52,211,153,.15);color:#6ee7b7}
+.tag.pend{background:rgba(251,191,36,.12);color:#fbbf24}
+.tag.rej{background:rgba(251,113,133,.12);color:#fda4af}
+.tag.apr{background:rgba(167,139,250,.15);color:#ddd6fe}
+.warn{font-size:.82rem;line-height:1.7;padding:12px;border-radius:14px;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.16);color:#fde68a}
+.grid2{display:grid;gap:10px}
+@media(min-width:560px){.grid2{grid-template-columns:1fr 1fr}}
+.grid2>div{padding:14px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid var(--line)}
+.grid2 b{display:block;margin-bottom:4px;color:#ddd6fe}
+.grid2 p{color:var(--mut);font-size:.78rem;line-height:1.5}
+.foot{text-align:center;color:var(--mut);font-size:.74rem;margin-top:26px;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="sky"><div class="orb a"></div><div class="orb b"></div></div>
+<div class="page">
+
+<div id="splash">
+  <div style="text-align:center">
+    <div class="splash-mark"><i>LX</i></div>
+    <h1>لویکس</h1>
+    <p>سامانه رسمی تأیید وب‌سایت</p>
+  </div>
+</div>
+
+<div id="auth">
+  <div class="auth-hero">
+    <div class="pill">LUVEX OFFICIAL SYSTEM</div>
+    <h2>اعتبار وب‌سایتت را <span>رسمی</span> ثبت کن</h2>
+    <p class="lead">لویکس لایهٔ رسمی بررسی و انتشار هویت وب‌سایت است؛ تحت نظارت Lumera و OpenVex. قبل از اعتماد به هر لینک، وضعیتش را استعلام کن.</p>
+    <div class="stats">
+      <div class="stat"><b>RPC</b><span>امن سمت سرور</span></div>
+      <div class="stat"><b>۲۰ رقم</b><span>کد انتشار</span></div>
+      <div class="stat"><b>استعلام</b><span>عمومی و سریع</span></div>
+    </div>
+    <div class="checklist">
+      <div><div class="dot">✓</div><p>فرآیند ثبت و بررسی ساختاریافته</p></div>
+      <div><div class="dot">✓</div><p>مدیریت فقط برای حساب‌های مجاز سرور</p></div>
+      <div><div class="dot">✓</div><p>فهرست رسمی سایت‌های منتشرشده</p></div>
+    </div>
+  </div>
+  <div class="auth-form">
+    <div class="form-wrap">
+      <div class="brand-row">
+        <div class="lx">LX</div>
+        <div><strong>ورود به لویکس</strong><small>ایمیل · کسب‌وکار · نام سایت</small></div>
+      </div>
+      <div class="glass">
+        <div class="seg">
+          <button type="button" class="on" id="tabIn">ورود</button>
+          <button type="button" id="tabUp">ثبت‌نام</button>
+        </div>
+        <div id="boxIn">
+          <label>ایمیل</label>
+          <input id="inEmail" type="email" autocomplete="email" placeholder="name@email.com">
+          <label>نام سایت</label>
+          <input id="inSite" autocomplete="organization" placeholder="مثلاً mybrand">
+          <label>رمز عبور</label>
+          <input id="inPass" type="password" autocomplete="current-password" placeholder="رمز عبور">
+          <button class="cta" id="btnIn">ورود به سامانه</button>
+        </div>
+        <div id="boxUp" class="hidden">
+          <label>ایمیل</label>
+          <input id="upEmail" type="email" placeholder="name@email.com">
+          <label>نام کسب‌وکار</label>
+          <input id="upBiz" maxlength="80" placeholder="نام برند یا کسب‌وکار">
+          <label>نام سایت (انگلیسی، یکتا)</label>
+          <input id="upSite" maxlength="40" placeholder="مثلاً mybrand">
+          <label>رمز عبور (حداقل ۸ کاراکتر)</label>
+          <input id="upPass" type="password" maxlength="64" placeholder="رمز قوی">
+          <label>تکرار رمز</label>
+          <input id="upPass2" type="password" maxlength="64" placeholder="تکرار رمز">
+          <button class="cta" id="btnUp">ایجاد حساب رسمی</button>
+        </div>
+        <div class="msg" id="authMsg"></div>
+        <p class="fine">با ورود می‌پذیرید که اطلاعات صرفاً برای فرآیند تأیید استفاده شود.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="app">
+  <div class="top">
+    <div class="who">
+      <div class="av" id="avL">L</div>
+      <div><strong id="topBiz">—</strong><small id="topMeta">—</small></div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <span class="chip hidden" id="adminChip">مدیریت</span>
+      <button class="cta ghost" id="btnOut" style="width:auto;padding:8px 14px;margin:0;font-size:.8rem">خروج</button>
+    </div>
+  </div>
+
+  <div class="banner">
+    <h3>مرکز رسمی اعتبارسنجی</h3>
+    <p>تحت نظارت OpenVex و Lumera. فقط وب‌سایت‌های با وضعیت «منتشرشده» در فهرست رسمی قرار می‌گیرند.</p>
+    <div class="meter"><i></i></div>
+  </div>
+
+  <div class="sec hidden" id="adminSection">
+    <h4>پنل مدیریت</h4>
+    <div class="box admin">
+      <p style="color:var(--mut);font-size:.84rem;margin-bottom:12px">درخواست‌های در انتظار بررسی</p>
+      <div id="pendingList"></div>
+      <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+      <label>انتشار با کد ۲۰ رقمی</label>
+      <input id="pubCode" inputmode="numeric" maxlength="20" placeholder="کد تأیید کاربر">
+      <button class="cta ok" id="btnPublish">تأیید انتشار نهایی</button>
+      <div class="msg" id="adminMsg"></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <h4>ثبت درخواست جدید</h4>
+    <div class="box">
+      <label>لینک سایت</label>
+      <input id="sUrl" placeholder="https://example.com">
+      <label>عنوان کوتاه</label>
+      <input id="sTitle" maxlength="80" placeholder="نام نمایشی">
+      <label>توضیحات</label>
+      <textarea id="sDesc" rows="3" maxlength="1000" placeholder="حداقل ۱۰ کاراکتر درباره فعالیت سایت"></textarea>
+      <label>زمینه فعالیت</label>
+      <select id="sCat">
+        <option value="social">اجتماعی</option>
+        <option value="income">درآمدزا</option>
+        <option value="package">پکیج</option>
+        <option value="other">سایر</option>
+      </select>
+      <button class="cta" id="btnSubmit">ثبت و ارسال برای بررسی</button>
+      <div class="msg" id="subMsg"></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <h4>استعلام وضعیت رسمی</h4>
+    <div class="box">
+      <label>لینک سایت</label>
+      <input id="qUrl" placeholder="https://example.com">
+      <button class="cta ghost" id="btnInquire">استعلام</button>
+      <div class="msg" id="inqMsg" style="text-align:right;margin-top:12px"></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <h4>درباره سامانه</h4>
+    <div class="box">
+      <p style="color:var(--mut);font-size:.88rem;line-height:1.8;margin-bottom:12px">
+        لویکس لایه رسمی تأیید هویت وب‌سایت تحت نظارت مالکان OpenVex و Lumera است.
+      </p>
+      <div class="warn">مسئولیت هر وب‌سایت تأییدنشده صرفاً بر عهده سازنده و بهره‌بردار همان وب‌سایت است.</div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <h4>درخواست‌های من</h4>
+    <div class="box" id="mySites"><p style="color:var(--mut)">—</p></div>
+  </div>
+
+  <div class="sec">
+    <h4>فهرست رسمی منتشرشده</h4>
+    <div class="box" id="pubList"><p style="color:var(--mut)">—</p></div>
+  </div>
+
+  <div class="sec">
+    <h4>ویژگی‌ها</h4>
+    <div class="grid2">
+      <div><b>ثبت امن</b><p>فقط نشست و RPC سمت سرور</p></div>
+      <div><b>استعلام عمومی</b><p>وضعیت هر لینک در لحظه</p></div>
+      <div><b>کد ۲۰ رقمی</b><p>انتشار نهایی یکتا</p></div>
+      <div><b>مدیریت قفل‌شده</b><p>فقط hesam و raptor</p></div>
+    </div>
+  </div>
+  <p class="foot">Luvex · Official verification layer<br>Lumera × OpenVex</p>
+</div>
+</div>
+<script>
+(function(){
+const URL='https://nusncctcbuchijtlpwdr.supabase.co';
+const KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im51c25jY3RjYnVjaGlqdGxwd2RyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIwNTc2NTQsImV4cCI6MjEwNzYzMzY1NH0.r8GYkjsIBcLacPhxI7bL78SbtdWGigYNScdwXp7zCkM';
+const TK='lv_token_v1';
+let token=localStorage.getItem(TK)||'',user=null;
+async function sha256(t){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+async function rpc(name,body){
+  try{
+    const r=await fetch(URL+'/rest/v1/rpc/'+name,{method:'POST',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(body||{})});
+    const text=await r.text();let d=null;try{d=text?JSON.parse(text):null}catch(e){d={raw:text}}
+    if(!r.ok){if(r.status===404)return{ok:false,error:'تابع سرور پیدا نشد.'};return{ok:false,error:(d&&(d.message||d.error||d.hint))||('HTTP '+r.status)}}
+    return d;
+  }catch(e){return{ok:false,error:'ارتباط با سرور قطع است.'}}
+}
+function setTok(t){token=t||'';if(token)localStorage.setItem(TK,token);else localStorage.removeItem(TK)}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function catFa(c){return({social:'اجتماعی',income:'درآمدزا',package:'پکیج',other:'سایر'})[c]||c}
+function stTag(s){const m={pending:['pend','در انتظار'],approved:['apr','تأیید شده'],rejected:['rej','رد شده'],published:['pub','منتشر شده']};const x=m[s]||['','?'];return'<span class="tag '+x[0]+'">'+x[1]+'</span>'}
+async function boot(){
+  setTimeout(function(){var el=document.getElementById('splash');el.classList.add('go');setTimeout(function(){el.style.display='none'},550)},1600);
+  if(token){const me=await rpc('lv_me',{p_token:token});if(me&&me.ok){user=me.user;enterApp();return}setTok('')}
+  document.getElementById('auth').classList.add('on');
+}
+function enterApp(){
+  document.getElementById('auth').classList.remove('on');
+  document.getElementById('app').style.display='block';
+  document.getElementById('topBiz').textContent=user.business_name||user.site_name;
+  document.getElementById('topMeta').textContent=user.email+' · @'+user.site_name;
+  document.getElementById('avL').textContent=(user.business_name||user.site_name||'L').slice(0,1).toUpperCase();
+  var chip=document.getElementById('adminChip'),adm=document.getElementById('adminSection');
+  if(user.is_admin===true){chip.classList.remove('hidden');adm.classList.remove('hidden');loadPending()}
+  else{chip.classList.add('hidden');adm.classList.add('hidden')}
+  loadMine();loadPublished();
+}
+document.getElementById('tabIn').onclick=function(){this.classList.add('on');document.getElementById('tabUp').classList.remove('on');document.getElementById('boxIn').classList.remove('hidden');document.getElementById('boxUp').classList.add('hidden');document.getElementById('authMsg').textContent=''};
+document.getElementById('tabUp').onclick=function(){this.classList.add('on');document.getElementById('tabIn').classList.remove('on');document.getElementById('boxUp').classList.remove('hidden');document.getElementById('boxIn').classList.add('hidden');document.getElementById('authMsg').textContent=''};
+document.getElementById('btnIn').onclick=async function(){
+  var msg=document.getElementById('authMsg');msg.className='msg';msg.textContent='';
+  var email=document.getElementById('inEmail').value.trim(),site=document.getElementById('inSite').value.trim(),pass=document.getElementById('inPass').value;
+  if(!email||!site||!pass){msg.textContent='همه فیلدها لازم است';return}
+  this.disabled=true;var res=await rpc('lv_login',{p_email:email,p_site_name:site,p_hash:await sha256(pass)});this.disabled=false;
+  if(!res||!res.ok){msg.textContent=(res&&res.error)||'خطا';return}setTok(res.token);user=res.user;enterApp();
+};
+document.getElementById('btnUp').onclick=async function(){
+  var msg=document.getElementById('authMsg');msg.className='msg';msg.textContent='';
+  var email=document.getElementById('upEmail').value.trim(),biz=document.getElementById('upBiz').value.trim(),site=document.getElementById('upSite').value.trim(),pass=document.getElementById('upPass').value,pass2=document.getElementById('upPass2').value;
+  if(!email||!biz||!site||!pass){msg.textContent='همه فیلدها لازم است';return}
+  if(biz.length<2){msg.textContent='نام کسب‌وکار کوتاه است';return}
+  if(pass.length<8){msg.textContent='رمز حداقل ۸ کاراکتر';return}
+  if(pass!==pass2){msg.textContent='رمزها یکسان نیستند';return}
+  this.disabled=true;var res=await rpc('lv_register',{p_email:email,p_business:biz,p_site_name:site,p_hash:await sha256(pass)});this.disabled=false;
+  if(!res||!res.ok){msg.textContent=(res&&res.error)||'خطا';return}setTok(res.token);user=res.user;enterApp();
+};
+document.getElementById('btnOut').onclick=async function(){if(token)await rpc('lv_logout',{p_token:token});setTok('');user=null;document.getElementById('app').style.display='none';document.getElementById('auth').classList.add('on')};
+document.getElementById('btnSubmit').onclick=async function(){
+  var msg=document.getElementById('subMsg');msg.className='msg';msg.textContent='';
+  var res=await rpc('lv_submit_site',{p_token:token,p_url:document.getElementById('sUrl').value.trim(),p_title:document.getElementById('sTitle').value.trim(),p_description:document.getElementById('sDesc').value.trim(),p_category:document.getElementById('sCat').value});
+  if(!res||!res.ok){msg.textContent=(res&&res.error)||'خطا';return}
+  msg.className='msg ok';msg.textContent=res.message||'ارسال شد';
+  document.getElementById('sUrl').value='';document.getElementById('sTitle').value='';document.getElementById('sDesc').value='';loadMine();
+};
+document.getElementById('btnInquire').onclick=async function(){
+  var msg=document.getElementById('inqMsg');msg.className='msg';msg.style.color='var(--mut)';
+  var res=await rpc('lv_inquire',{p_url:document.getElementById('qUrl').value.trim()});
+  if(!res||!res.ok){msg.style.color='var(--bad)';msg.textContent=(res&&res.error)||'خطا';return}
+  if(!res.registered){msg.style.color='var(--bad)';msg.textContent=res.message;return}
+  msg.style.color='var(--ok)';msg.innerHTML=esc(res.message)+'<br><small>وضعیت: '+esc(res.status)+(res.title?(' · '+esc(res.title)):'')+'</small>';
+};
+async function loadMine(){
+  var res=await rpc('lv_my_sites',{p_token:token});var el=document.getElementById('mySites');
+  if(!res||!res.ok){el.innerHTML='<p style="color:var(--bad)">خطا</p>';return}
+  var sites=res.sites||[];if(!sites.length){el.innerHTML='<p style="color:var(--mut)">هنوز درخواستی ندارید</p>';return}
+  el.innerHTML=sites.map(function(s){var code='';if(s.status==='approved'&&s.verify_code)code='<p style="margin-top:6px;color:#ddd6fe;font-size:.82rem">کد تأیید: <b dir="ltr">'+esc(s.verify_code)+'</b></p>';
+    return'<div class="row"><b>'+esc(s.title||s.url)+' '+stTag(s.status)+'</b><p dir="ltr" style="text-align:left">'+esc(s.url)+'</p><p>'+esc(s.description||'')+'</p>'+code+'</div>'}).join('');
+}
+async function loadPublished(){
+  var res=await rpc('lv_list_published',{p_limit:30});var el=document.getElementById('pubList');
+  if(!res||!res.ok){el.innerHTML='<p style="color:var(--bad)">خطا</p>';return}
+  var sites=res.sites||[];if(!sites.length){el.innerHTML='<p style="color:var(--mut)">هنوز موردی منتشر نشده</p>';return}
+  el.innerHTML=sites.map(function(s){return'<div class="row"><b>'+esc(s.title||s.url)+' <span class="tag pub">منتشر شده</span></b><p dir="ltr" style="text-align:left"><a href="'+esc(s.url)+'" target="_blank" rel="noopener">'+esc(s.url)+'</a></p></div>'}).join('');
+}
+async function loadPending(){
+  var res=await rpc('lv_admin_pending',{p_token:token});var el=document.getElementById('pendingList');
+  if(!res||!res.ok){el.innerHTML='<p style="color:var(--bad)">'+(res&&res.error||'خطا')+'</p>';return}
+  var sites=res.sites||[];if(!sites.length){el.innerHTML='<p style="color:var(--mut)">صف خالی است</p>';return}
+  el.innerHTML=sites.map(function(s){return'<div class="row"><b>'+esc(s.title||s.url)+'</b><p dir="ltr" style="text-align:left">'+esc(s.url)+'</p><p>'+esc(s.description)+'</p><p style="font-size:.75rem;color:var(--mut)">'+esc(s.business_name)+' · @'+esc(s.site_name)+'</p><div style="display:flex;gap:8px;margin-top:8px"><button class="cta ok" style="margin:0;width:auto;padding:8px 12px" data-apr="'+s.id+'">تأیید</button><button class="cta bad" style="margin:0;width:auto;padding:8px 12px" data-rej="'+s.id+'">رد</button></div></div>'}).join('');
+  el.querySelectorAll('[data-apr]').forEach(function(b){b.onclick=function(){review(b.dataset.apr,'approve')}});
+  el.querySelectorAll('[data-rej]').forEach(function(b){b.onclick=function(){review(b.dataset.rej,'reject')}});
+}
+async function review(id,action){
+  var note=action==='reject'?(prompt('دلیل رد:')||''):'';
+  var res=await rpc('lv_admin_review',{p_token:token,p_site_id:id,p_action:action,p_note:note});
+  var msg=document.getElementById('adminMsg');
+  if(!res||!res.ok){msg.className='msg';msg.textContent=(res&&res.error)||'خطا';return}
+  msg.className='msg ok';msg.textContent=action==='approve'?('تأیید شد. کد: '+(res.verify_code||'')):'رد شد';loadPending();
+}
+document.getElementById('btnPublish').onclick=async function(){
+  var msg=document.getElementById('adminMsg');msg.className='msg';
+  var res=await rpc('lv_admin_publish',{p_token:token,p_code:document.getElementById('pubCode').value.trim()});
+  if(!res||!res.ok){msg.textContent=(res&&res.error)||'خطا';return}
+  msg.className='msg ok';msg.textContent='منتشر شد: '+(res.title||res.url);
+  document.getElementById('pubCode').value='';loadPublished();
+};
+boot();
+})();
+</script>
+</body>
+</html>
